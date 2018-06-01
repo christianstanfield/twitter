@@ -99,6 +99,12 @@ module Twitter
 
       # @param path [String]
       # @param options [Hash]
+      def perform_get_lists_with_objects(path, options = {})
+        perform_request(:get, path, options)
+      end
+
+      # @param path [String]
+      # @param options [Hash]
       # @param collection_name [Symbol]
       # @param klass [Class]
       def perform_get_with_cursor(path, options, collection_name, klass = nil)
