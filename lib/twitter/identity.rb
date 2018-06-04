@@ -13,6 +13,8 @@ module Twitter
     # @raise [ArgumentError] Error raised when supplied argument is missing an :id key.
     # @return [Twitter::Identity]
     def initialize(attrs = {})
+      puts "attrs"
+      pp attrs
       attrs.fetch(:id)
       super
     end

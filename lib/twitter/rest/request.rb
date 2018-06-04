@@ -23,6 +23,10 @@ module Twitter
       # @param options [Hash]
       # @return [Twitter::REST::Request]
       def initialize(client, request_method, path, options = {})
+        puts "inside request"
+        pp request_method
+        pp path
+        pp options
         @client = client
         @uri = Addressable::URI.parse(path.start_with?('http') ? path : BASE_URL + path)
         set_multipart_options!(request_method, options)
@@ -33,7 +37,11 @@ module Twitter
       # @return [Array, Hash]
       def perform
         options_key = @request_method == :get ? :params : :form
+        puts "options_key"
+        pp options_key
         response = http_client.headers(@headers).public_send(@request_method, @uri.to_s, options_key => @options)
+        puts "response"
+        pp response
         response_body = response.body.empty? ? '' : symbolize_keys!(response.parse)
         response_headers = response.headers
         fail_or_return_response_body(response.code, response_body, response_headers)
@@ -59,7 +67,12 @@ module Twitter
           @headers = Twitter::Headers.new(@client, @request_method, @uri).request_headers
         else
           @request_method = request_method
+          puts "@request_method"
+          pp @request_method
           @headers = Twitter::Headers.new(@client, @request_method, @uri, options).request_headers
+          puts "@headers inside request class"
+          pp @headers
+          pp @headers.class
         end
       end
 

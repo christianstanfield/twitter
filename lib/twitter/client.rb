@@ -6,7 +6,7 @@ module Twitter
   class Client
     include Twitter::Utils
     attr_accessor :access_token, :access_token_secret, :consumer_key, :consumer_secret, :proxy, :timeouts
-    attr_writer :user_agent
+    attr_writer :user_agent, :content_type
 
     # Initializes a new Client object
     #
@@ -42,6 +42,11 @@ module Twitter
     # @return [Boolean]
     def credentials?
       credentials.values.none? { |v| blank?(v) }
+    end
+
+    # @return [String]
+    def content_type
+      @content_type ||= "application/json"
     end
 
   private

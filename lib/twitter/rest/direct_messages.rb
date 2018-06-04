@@ -142,6 +142,33 @@ module Twitter
       alias d create_direct_message
       alias m create_direct_message
       alias dm create_direct_message
+
+      # Implementing new API Endpoint to send a new direct message to the specified user from the authenticating user
+      def send_direct_message(user, message, options = {})
+        options["type"] = "message_create"
+        options["message_create.target.recipient_id"] = user
+        options["message_create.message_data"] = message
+        # puts "options"
+        # pp options
+
+        # options["Content-Type"] = "application/json"
+
+        # options = {
+        #   "event": {
+        #     "type": "message_create",
+        #     "message_create": {
+        #       "target": {
+        #         "recipient_id": "#{user}"
+        #       },
+        #       "message_data": {
+        #         "text": "#{message}",
+        #       }
+        #     }
+        #   }
+        # }
+
+        perform_post_with_object('/1.1/direct_messages/events/new.json', options, Twitter::DirectMessage)
+      end
     end
   end
 end

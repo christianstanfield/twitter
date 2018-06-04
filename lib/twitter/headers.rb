@@ -21,6 +21,8 @@ module Twitter
     end
 
     def request_headers
+      puts "@client"
+      pp @client
       headers = {}
       headers[:user_agent] = @client.user_agent
       if bearer_token_request?
@@ -29,6 +31,7 @@ module Twitter
       else
         headers[:authorization] = auth_header
       end
+      # headers[:Content-Type] = @client.content_type
       headers
     end
 
