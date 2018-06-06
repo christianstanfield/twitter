@@ -6,7 +6,7 @@ module Twitter
   class Client
     include Twitter::Utils
     attr_accessor :access_token, :access_token_secret, :consumer_key, :consumer_secret, :proxy, :timeouts
-    attr_writer :user_agent, :content_type
+    attr_writer :user_agent
 
     # Initializes a new Client object
     #
