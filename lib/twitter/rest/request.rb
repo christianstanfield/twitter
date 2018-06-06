@@ -37,8 +37,6 @@ module Twitter
       # @return [Array, Hash]
       def perform
         options_key = @request_method == :get ? :params : :form
-        puts "options_key"
-        pp options_key
         response = http_client.headers(@headers).public_send(@request_method, @uri.to_s, options_key => @options)
         puts "response"
         pp response
@@ -67,9 +65,10 @@ module Twitter
           @headers = Twitter::Headers.new(@client, @request_method, @uri).request_headers
         else
           @request_method = request_method
-          puts "@request_method"
-          pp @request_method
+          # puts "@request_method"
+          # pp @request_method
           @headers = Twitter::Headers.new(@client, @request_method, @uri, options).request_headers
+          # @headers[:content_type] = "application/json"
           puts "@headers inside request class"
           pp @headers
           pp @headers.class

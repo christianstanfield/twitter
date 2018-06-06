@@ -44,11 +44,6 @@ module Twitter
       credentials.values.none? { |v| blank?(v) }
     end
 
-    # @return [String]
-    def content_type
-      @content_type ||= "application/json"
-    end
-
   private
 
     def blank?(s)

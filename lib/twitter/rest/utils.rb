@@ -71,8 +71,8 @@ module Twitter
       def perform_post_with_object(path, options, klass)
         # puts "path"
         # pp path
-        # puts "options"
-        # pp options
+        puts "options in utils"
+        puts options
         # pp options.class
         # puts "klass"
         # pp klass
