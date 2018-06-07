@@ -3,7 +3,6 @@ require 'twitter/direct_message'
 require 'twitter/rest/utils'
 require 'twitter/user'
 require 'twitter/utils'
-require 'json'
 
 module Twitter
   module REST
@@ -146,29 +145,21 @@ module Twitter
 
       # Implementing new API Endpoint to send a new direct message to the specified user from the authenticating user
       def send_direct_message(user, message)
-        # options["type"] = "message_create"
-        # options["message_create.target.recipient_id"] = user
-        # options["message_create.message_data"] = message
-
         options = {
-          "event": {
-            "type": "message_create",
-            "message_create": {
-              "target": {
-                "recipient_id": "#{user}"
+          event: {
+            type: :message_create,
+            message_create: {
+              target: {
+                recipient_id: user
               },
-              "message_data": {
-                "text": "#{message}"
+              message_data: {
+                text: message
               }
             }
           }
         }
 
-        puts "options"
-        puts options
-        puts options.class
-
-        perform_post_with_object('/1.1/direct_messages/events/new.json', options, Twitter::DirectMessage)
+        perform_json_post_with_object('/1.1/direct_messages/events/new.json', options, Twitter::DirectMessage)
       end
     end
   end

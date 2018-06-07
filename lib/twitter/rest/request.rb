@@ -23,12 +23,9 @@ module Twitter
       # @param options [Hash]
       # @return [Twitter::REST::Request]
       def initialize(client, request_method, path, options = {})
-        puts "inside request"
-        pp request_method
-        pp path
-        pp options
         @client = client
         @uri = Addressable::URI.parse(path.start_with?('http') ? path : BASE_URL + path)
+        @json_post = options.delete(:json_post)
         set_multipart_options!(request_method, options)
         @path = uri.path
         @options = options
@@ -36,10 +33,15 @@ module Twitter
 
       # @return [Array, Hash]
       def perform
-        options_key = @request_method == :get ? :params : :form
+        options_key =
+          if @request_method == :get
+            :params
+          elsif @json_post
+            :json
+          else
+            :form
+          end
         response = http_client.headers(@headers).public_send(@request_method, @uri.to_s, options_key => @options)
-        puts "response"
-        pp response
         response_body = response.body.empty? ? '' : symbolize_keys!(response.parse)
         response_headers = response.headers
         fail_or_return_response_body(response.code, response_body, response_headers)
@@ -65,13 +67,8 @@ module Twitter
           @headers = Twitter::Headers.new(@client, @request_method, @uri).request_headers
         else
           @request_method = request_method
-          # puts "@request_method"
-          # pp @request_method
-          @headers = Twitter::Headers.new(@client, @request_method, @uri, options).request_headers
-          # @headers[:content_type] = "application/json"
-          puts "@headers inside request class"
-          pp @headers
-          pp @headers.class
+          header_options = @json_post ? { json_post: @json_post } : options
+          @headers = Twitter::Headers.new(@client, @request_method, @uri, header_options).request_headers
         end
       end
 

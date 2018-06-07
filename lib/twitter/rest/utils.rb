@@ -47,15 +47,7 @@ module Twitter
       # @param path [String]
       # @param options [Hash]
       def perform_request(request_method, path, options = {})
-        puts "options in perform"
-        pp options
-        req_obj = Twitter::REST::Request.new(self, request_method, path, options)
-        puts "req_obj"
-        pp req_obj
-        res = req_obj.perform
-        puts "res"
-        pp res
-        res
+        Twitter::REST::Request.new(self, request_method, path, options).perform
       end
 
       # @param path [String]
@@ -69,14 +61,13 @@ module Twitter
       # @param options [Hash]
       # @param klass [Class]
       def perform_post_with_object(path, options, klass)
-        # puts "path"
-        # pp path
-        puts "options in utils"
-        puts options
-        # pp options.class
-        # puts "klass"
-        # pp klass
         perform_request_with_object(:post, path, options, klass)
+      end
+
+      def perform_json_post_with_object(path, options, klass)
+        options[:json_post] = true
+        response = perform_request(:post, path, options)
+        klass.new(response[:event])
       end
 
       # @param request_method [Symbol]
@@ -85,8 +76,6 @@ module Twitter
       # @param klass [Class]
       def perform_request_with_object(request_method, path, options, klass)
         response = perform_request(request_method, path, options)
-        puts "response"
-        pp response
         klass.new(response)
       end
 
