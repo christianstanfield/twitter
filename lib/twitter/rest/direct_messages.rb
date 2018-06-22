@@ -49,7 +49,6 @@ module Twitter
       # Implementing new API Endpoint which returns list of direct messages
       def direct_messages_list(options = {})
         response = perform_get_lists_with_objects('/1.1/direct_messages/events/list.json', options)
-        response[:events].map! { |event| Twitter::DirectMessage.new(event) }
         response
       end
 
@@ -160,6 +159,9 @@ module Twitter
         }
 
         perform_json_post_with_object('/1.1/direct_messages/events/new.json', options, Twitter::DirectMessage)
+        # options[:json_post] = true 
+        # response = perform_request(:post, path, options) 
+        # response[:event]
       end
     end
   end
