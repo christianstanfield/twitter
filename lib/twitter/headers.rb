@@ -9,6 +9,7 @@ module Twitter
       @request_method = request_method.to_sym
       @uri = Addressable::URI.parse(url)
       @bearer_token_request = options.delete(:bearer_token_request)
+      @json_post = options.delete(:json_post)
       @options = options
     end
 
@@ -22,6 +23,7 @@ module Twitter
 
     def request_headers
       headers = {}
+      headers[:content_type] = 'application/json' if @json_post
       headers[:user_agent] = @client.user_agent
       if bearer_token_request?
         headers[:accept]        = '*/*'

@@ -46,6 +46,12 @@ module Twitter
         perform_get_with_objects('/1.1/direct_messages/sent.json', options, Twitter::DirectMessage)
       end
 
+      # Implementing new API Endpoint which returns list of direct messages
+      def direct_messages_list(options = {})
+        response = perform_get_lists_with_objects('/1.1/direct_messages/events/list.json', options)
+        response
+      end
+
       # Returns a direct message
       #
       # @see https://dev.twitter.com/rest/reference/get/direct_messages/show
@@ -135,6 +141,28 @@ module Twitter
       alias d create_direct_message
       alias m create_direct_message
       alias dm create_direct_message
+
+      # Implementing new API Endpoint to send a new direct message to the specified user from the authenticating user
+      def send_direct_message(user, message)
+        options = {
+          event: {
+            type: :message_create,
+            message_create: {
+              target: {
+                recipient_id: user
+              },
+              message_data: {
+                text: message
+              }
+            }
+          }
+        }
+
+        perform_json_post_with_object('/1.1/direct_messages/events/new.json', options, Twitter::DirectMessage)
+        # options[:json_post] = true 
+        # response = perform_request(:post, path, options) 
+        # response[:event]
+      end
     end
   end
 end

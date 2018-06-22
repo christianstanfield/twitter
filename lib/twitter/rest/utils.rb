@@ -64,6 +64,12 @@ module Twitter
         perform_request_with_object(:post, path, options, klass)
       end
 
+      def perform_json_post_with_object(path, options, klass)
+        options[:json_post] = true
+        response = perform_request(:post, path, options)
+        klass.new(response[:event])
+      end
+
       # @param request_method [Symbol]
       # @param path [String]
       # @param options [Hash]
@@ -95,6 +101,12 @@ module Twitter
         perform_request(request_method, path, options).collect do |element|
           klass.new(element)
         end
+      end
+
+      # @param path [String]
+      # @param options [Hash]
+      def perform_get_lists_with_objects(path, options = {})
+        perform_request(:get, path, options)
       end
 
       # @param path [String]
